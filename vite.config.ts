@@ -17,10 +17,17 @@ export default defineConfig({
       dts: './src/components.d.ts',
     }),
     AutoImport({
-      imports: ['vue', VueRouterAutoImports],
+      imports: [
+        'vue',
+        VueRouterAutoImports,
+        {
+          pinia: ['defineStore', 'storeToRefs', 'acceptHMRUpdate'],
+        },
+      ],
       include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/, /\.md$/],
       dts: './src/auto-imports.d.ts',
       viteOptimizeDeps: true,
+      dirs: ['./src/stores'],
     }),
     vue({
       template: {
