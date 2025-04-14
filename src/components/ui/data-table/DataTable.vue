@@ -62,3 +62,13 @@ const table = useVueTable({
     </Table>
   </div>
 </template>
+
+<style scoped>
+@reference "tailwindcss";
+td {
+  @apply p-0;
+}
+td > * {
+  @apply p-4;
+}
+</style>

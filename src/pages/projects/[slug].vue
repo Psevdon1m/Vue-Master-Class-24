@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 
-const route = useRoute<'/projects/[id]'>()
-const projectId = route.params.id
+const route = useRoute<'/projects/[slug]'>()
+const projectSlug = route.params.slug
 </script>
 
 <template>
   <div>
-    <h1>Project ID: {{ projectId }}</h1>
+    <h1>Project Slug: {{ projectSlug }}</h1>
     <RouterLink to="/projects">Projects</RouterLink>
   </div>
 </template>
