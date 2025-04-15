@@ -1,8 +1,24 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const { activeError } = storeToRefs(useErrorStore())
+import type { CustomError } from '@/types/Error'
+
+onErrorCaptured((error) => {
+  console.log({ error })
+  const hint = error.stack?.split('\n')[1] || ''
+  const customError = new Error(error.message) as CustomError
+  customError.hint = hint
+
+  useErrorStore().showErrorPage({
+    error: customError,
+    code: 500,
+  })
+})
+</script>
 
 <template>
   <AuthLayout>
-    <RouterView v-slot="{ Component, route }">
+    <AppErrorPage v-if="activeError" />
+    <RouterView v-else v-slot="{ Component, route }">
       <Suspense v-if="Component" :timeout="0">
         <Component :is="Component" :key="route.name" />
         <template #fallback>

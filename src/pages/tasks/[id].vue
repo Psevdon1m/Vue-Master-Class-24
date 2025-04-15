@@ -14,9 +14,10 @@ watch(
 )
 
 const getTask = async () => {
-  const { data, error } = await taskQuery(taskId)
+  const { data, error, status } = await taskQuery(taskId)
   if (error) {
-    console.error(error)
+    useErrorStore().showErrorPage({ error, code: status })
+    return null
   }
   return data
 }

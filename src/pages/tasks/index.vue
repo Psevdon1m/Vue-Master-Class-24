@@ -7,10 +7,11 @@ const tasks = ref<TasksWithProjects | null>(null)
 usePageStore().pageData.title = 'Tasks'
 
 const fetchTasks = async () => {
-  const { data, error } = await tasksWithProjectsQuery
+  const { data, error, status } = await tasksWithProjectsQuery
+
   if (error) {
-    console.error('Error fetching tasks', error)
-    return
+    useErrorStore().showErrorPage({ error, code: status })
+    return null
   }
   tasks.value = data
 }
