@@ -6,8 +6,8 @@ const taskId = route.params.id
 </script>
 
 <template>
-  <div>
-    <h1>Task ID: {{ taskId }}</h1>
-    <RouterLink to="/tasks">Tasks</RouterLink>
-  </div>
+    <div>
+      <h1>Task ID: {{ taskId }}</h1>
+      <RouterLink to="/tasks">Tasks</RouterLink>
+    </div>
 </template>
