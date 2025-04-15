@@ -29,7 +29,6 @@ const accountLinks = [
     title: 'Settings',
   },
   {
-    to: '/signout',
     icon: 'lucide:log-out',
     title: 'Sign out',
   },
