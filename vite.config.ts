@@ -27,7 +27,7 @@ export default defineConfig({
       include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/, /\.md$/],
       dts: './src/auto-imports.d.ts',
       viteOptimizeDeps: true,
-      dirs: ['./src/stores'],
+      dirs: ['./src/stores/**', './src/composables/**'],
     }),
     vue({
       template: {

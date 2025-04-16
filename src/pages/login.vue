@@ -1,17 +1,30 @@
 <script setup lang="ts">
 import { login } from '@/utils/supaAuth'
+import { debouncedWatch } from '@vueuse/core'
+
 const router = useRouter()
 const formData = ref({
   email: '',
   password: '',
 })
 
-const _error = ref('')
+debouncedWatch(
+  formData,
+  async () => {
+    await handleLoginForm(formData.value)
+  },
+  {
+    debounce: 1000,
+    deep: true,
+  },
+)
+
+const { serverError, handleServerError, realtimeErrors, handleLoginForm } = useFormErrors()
 
 const signin = async () => {
   const { error } = await login(formData.value)
   if (!error) return router.push('/')
-  _error.value = error.message
+  handleServerError(error)
 }
 </script>
 
@@ -36,8 +49,16 @@ const signin = async () => {
               placeholder="johndoe19@example.com"
               required
               v-model="formData.email"
-              :class="{ 'border-red-500': _error }"
+              :class="{ 'border-red-500': serverError }"
             />
+            <ul
+              v-if="realtimeErrors && realtimeErrors?.email?.length > 0"
+              class="text-sm text-left text-red-500"
+            >
+              <li v-for="error in realtimeErrors.email" :key="error" class="list-disc">
+                {{ error }}
+              </li>
+            </ul>
           </div>
           <div class="grid gap-2">
             <div class="flex items-center">
@@ -50,13 +71,28 @@ const signin = async () => {
               autocomplete
               required
               v-model="formData.password"
-              :class="{ 'border-red-500': _error }"
+              :class="{ 'border-red-500': serverError }"
             />
+            <ul
+              v-if="realtimeErrors && realtimeErrors?.password?.length > 0"
+              class="text-sm text-left text-red-500"
+            >
+              <li v-for="error in realtimeErrors.password" :key="error" class="list-disc">
+                {{ error }}
+              </li>
+            </ul>
           </div>
-          <ul v-if="_error" class="text-sm text-left text-red-500">
-            <li class="list-disc">{{ _error }}</li>
-          </ul>
-          <Button type="submit" class="w-full"> Login </Button>
+
+          <Button
+            type="submit"
+            class="w-full"
+            :disabled="
+              (realtimeErrors && realtimeErrors?.email?.length > 0) ||
+              (realtimeErrors && realtimeErrors?.password?.length > 0)
+            "
+          >
+            Login
+          </Button>
         </form>
         <div class="mt-4 text-sm text-center">
           Don't have an account?
