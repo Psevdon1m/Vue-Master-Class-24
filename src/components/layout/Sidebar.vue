@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const router = useRouter()
 const links = [
   {
     to: '/',
@@ -33,6 +34,16 @@ const accountLinks = [
     title: 'Sign out',
   },
 ]
+
+const handleLogout = async (title: string) => {
+  if (title === 'Sign out') {
+    const { logout } = await import('@/utils/supaAuth')
+    let success = await logout()
+    if (success) {
+      router.push('/login')
+    }
+  }
+}
 </script>
 
 <template>
@@ -55,7 +66,7 @@ const accountLinks = [
       </div>
 
       <div class="border-y text-center bg-background py-3">
-        <SidebarLinks :links="accountLinks" />
+        <SidebarLinks :links="accountLinks" @logout="handleLogout" />
       </div>
     </nav>
   </aside>

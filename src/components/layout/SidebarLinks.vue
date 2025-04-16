@@ -9,8 +9,12 @@ defineProps<{
   links: LinkProp[]
 }>()
 
-const logout = () => {
-  console.log('logout')
+const emit = defineEmits<{
+  (e: 'logout', title: string): void
+}>()
+
+const logout = (link: LinkProp) => {
+  emit('logout', link.title)
 }
 </script>
 
@@ -28,8 +32,8 @@ const logout = () => {
     </RouterLink>
     <a
       v-else
-      class="flex items-center gap-3 px-4 py-2 mx-2 transition-colors rounded-lg hover:text-primary justify-center lg:justify-normal text-muted-foreground cursor-pointer"
-      @click="logout"
+      class="flex items-center gap-3 px-4 py-2 mx-2 transition-colors rounded-lg hover:text-primary justify-center lg:justify-normal text-muted-foreground cursor-pointer3"
+      @click="logout(link)"
     >
       <iconify-icon :icon="link.icon"></iconify-icon>
       <span class="hidden lg:block text-nowrap">{{ link.title }}</span>

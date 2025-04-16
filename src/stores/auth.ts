@@ -6,6 +6,7 @@ import supabase from '@/lib/supabaseClient'
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null)
   const profile = ref<Tables<'profiles'> | null>(null)
+  const isTrackingAuth = ref(false)
 
   const setAuth = async (userSession: null | Session = null) => {
     if (!userSession) {
@@ -46,11 +47,24 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  const trackAuth = async () => {
+    if (isTrackingAuth.value) {
+      return
+    }
+    isTrackingAuth.value = true
+    supabase.auth.onAuthStateChange((event, session) => {
+      setTimeout(async () => {
+        await setAuth(session)
+      }, 0)
+    })
+  }
+
   return {
     user,
     profile,
     setAuth,
     getSession,
+    trackAuth,
   }
 })
 
