@@ -6,10 +6,19 @@ const router = createRouter({
   routes,
 })
 
-// router.beforeEach(async (_, __, next) => {
-//   const authStore = useAuthStore()
-//   await authStore.getSession()
-//   next()
-// })
+router.beforeEach(async (to) => {
+  const authStore = useAuthStore()
+  await authStore.getSession()
+  const isAuthPage = ['/login', '/register'].includes(to.path)
+  if (!authStore.user && !isAuthPage) {
+    console.log('redirecting to login')
+    return { name: '/login' }
+  }
+
+  if (authStore.user && isAuthPage) {
+    console.log('redirecting to home')
+    return { name: '/' }
+  }
+})
 
 export default router
