@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const { activeError } = storeToRefs(useErrorStore())
 import type { CustomError } from '@/types/Error'
+import supabase from './lib/supabaseClient'
 
 const authStore = useAuthStore()
 

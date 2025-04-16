@@ -1,61 +1,153 @@
+/* eslint-env node */
+
 import { fakerEN_US as faker } from '@faker-js/faker'
 import { createClient } from '@supabase/supabase-js'
 
 const supabase = createClient(process.env.VITE_SUPABASE_URL, process.env.SERVICE_ROLE_KEY)
 
-const seedProjects = async (numEntries = 10) => {
-  const projects = []
-  for (let i = 0; i < numEntries; i++) {
-    const name = faker.lorem.words(3)
-    const row = {
-      name,
-      slug: name.toLocaleLowerCase().replace(/ /g, '-'),
-      description: faker.lorem.paragraph(),
-      status: faker.helpers.arrayElement(['in_progress', 'completed']),
-      collaborators: [faker.helpers.arrayElement([1, 2, 3])],
+const testingUserEmail = process.env.TESTING_USER_EMAIL
+if (!testingUserEmail) {
+  console.error('Have you forgot to add TESTING_USER_EMAIL to your .env file?')
+  process.exit()
+}
+
+const logErrorAndExit = (tableName, error) => {
+  console.error(
+    `An error occurred in table '${tableName}' with code ${error.code}: ${error.message}`,
+  )
+  process.exit(1)
+}
+
+const logStep = (stepMessage) => {
+  console.log(stepMessage)
+}
+
+const PrimaryTestUserExists = async () => {
+  logStep('Checking if primary test user exists...')
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('id, username')
+    .eq('username', 'testaccount1')
+    .single()
+
+  if (error) {
+    console.log('Primary test user not found. Will create one.')
+    return false
+  }
+
+  logStep('Primary test user is found.')
+  return data?.id
+}
+
+const createPrimaryTestUser = async () => {
+  logStep('Creating primary test user...')
+  const firstName = 'Test'
+  const lastName = 'Account'
+  const userName = 'testaccount1'
+  const email = testingUserEmail
+  const { data, error } = await supabase.auth.signUp({
+    email: email,
+    password: 'password',
+    options: {
+      data: {
+        first_name: firstName,
+        last_name: lastName,
+        full_name: firstName + ' ' + lastName,
+        username: userName,
+      },
+    },
+  })
+
+  if (error) {
+    logErrorAndExit('Users', error)
+  }
+
+  if (data) {
+    const userId = data.user.id
+    const { data: profileData, error: profileError } = await supabase.from('profiles').insert({
+      id: userId,
+      full_name: firstName + ' ' + lastName,
+      username: userName,
+      email: email,
+      bio: 'The main testing account',
+      avatar_url: `https://i.pravatar.cc/150?u=${data.user.id}`,
+    })
+
+    if (profileError) {
+      logErrorAndExit('Profiles', profileError)
     }
 
-    projects.push(row)
+    logStep('Primary test user created successfully.')
+    return userId
+  }
+}
+
+const seedProjects = async (numEntries, userId) => {
+  logStep('Seeding projects...')
+  const projects = []
+
+  for (let i = 0; i < numEntries; i++) {
+    const name = faker.lorem.words(3)
+
+    projects.push({
+      name: name,
+      slug: name.toLocaleLowerCase().replace(/ /g, '-'),
+      description: faker.lorem.paragraphs(2),
+      status: faker.helpers.arrayElement(['in_progress', 'completed']),
+      collaborators: faker.helpers.arrayElements([userId]),
+    })
   }
 
   const { data, error } = await supabase.from('projects').insert(projects).select('id')
 
-  if (error) {
-    console.error('Error seeding projects', error)
-    return
-  }
+  if (error) return logErrorAndExit('Projects', error)
 
-  console.log('Projects seeded')
+  logStep('Projects seeded successfully.')
+
   return data
 }
 
-const seedTasks = async (numEntries, projectIds) => {
+const seedTasks = async (numEntries, projectsIds, userId) => {
+  logStep('Seeding tasks...')
   const tasks = []
+
   for (let i = 0; i < numEntries; i++) {
     tasks.push({
       name: faker.lorem.words(3),
-      description: faker.lorem.paragraph(),
       status: faker.helpers.arrayElement(['in_progress', 'completed']),
+      description: faker.lorem.paragraph(),
       due_date: faker.date.future(),
-      project_id: faker.helpers.arrayElement(projectIds),
-      collaborators: [faker.helpers.arrayElement([1, 2, 3])],
+      profile_id: userId,
+      project_id: faker.helpers.arrayElement(projectsIds),
+      collaborators: faker.helpers.arrayElements([userId]),
     })
   }
 
   const { data, error } = await supabase.from('tasks').insert(tasks).select('id')
 
-  if (error) {
-    console.error('Error seeding tasks', error)
-    return
-  }
+  if (error) return logErrorAndExit('Tasks', error)
+
+  logStep('Tasks seeded successfully.')
+
   return data
 }
 
-const seedDatabase = async (numEntriesPerTable = 10) => {
-  const projectIds = (await seedProjects(numEntriesPerTable)).map((project) => project.id)
-  await seedTasks(numEntriesPerTable, projectIds)
+const seedDatabase = async (numEntriesPerTable) => {
+  let userId
+
+  const testUserId = await PrimaryTestUserExists()
+
+  if (!testUserId) {
+    const primaryTestUserId = await createPrimaryTestUser()
+    userId = primaryTestUserId
+  } else {
+    userId = testUserId
+  }
+
+  const projectsIds = (await seedProjects(numEntriesPerTable, userId)).map((project) => project.id)
+  await seedTasks(numEntriesPerTable, projectsIds, userId)
 }
 
 const numEntriesPerTable = 10
 
-await seedDatabase(numEntriesPerTable)
+seedDatabase(numEntriesPerTable)

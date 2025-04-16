@@ -13,17 +13,19 @@ export const register = async (formData: RegisterForm) => {
   }
 
   if (data.user) {
-    const { error } = await supabase.from('profiles').insert({
+    const { data: profileData, error: profileError } = await supabase.from('profiles').insert({
       id: data.user.id,
       username: formData.username,
       email: formData.email,
       full_name: formData.first_name + ' ' + formData.last_name,
     })
 
-    if (error) {
-      console.log('Profile err: ', error)
+    if (profileError) {
+      console.log('Profile err: ', profileError)
       return
     }
+
+    console.log('Profile data: ', profileData)
 
     return true
   }
