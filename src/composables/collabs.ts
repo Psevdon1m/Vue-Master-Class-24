@@ -8,6 +8,7 @@ import type { GroupedCollabs } from '@/types/GoupedCollabs'
 
 export const useCollabs = () => {
   const groupedCollabs = ref<GroupedCollabs>({})
+
   const getProfilesByIds = async (ids: string[]) => {
     const { data, error } = await profilesByIdsQuery(ids)
     if (error || !data) return []

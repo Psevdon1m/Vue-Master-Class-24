@@ -4,6 +4,8 @@ import { profileQuery } from '@/utils/supaQueries'
 
 const { username } = useRoute('/users/[username]').params
 const profile = ref<Tables<'profiles'> | null>(null)
+
+usePageStore().pageData.title = ``
 const fetchUserData = async () => {
   const { data, error, status } = await profileQuery({ col: 'username', val: username })
   if (error) {
