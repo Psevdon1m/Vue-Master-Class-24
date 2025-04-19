@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { projectQuery, type Project } from '@/utils/supaQueries'
 const route = useRoute('/projects/[slug]')
-const project = ref<Project | null>(null)
+
+const { getProject, updateProject } = useProjectsStore()
+const { project } = storeToRefs(useProjectsStore())
 
 watch(
   () => project.value?.name,
@@ -11,33 +12,26 @@ watch(
   },
 )
 
-const getFunction = async () => {
-  const { data, error } = await projectQuery(route.params.slug as string)
-  if (error) {
-    console.error('Error fetching project', error)
-    return
-  }
-  project.value = data
-}
-
-await getFunction()
+await getProject(route.params.slug as string)
 </script>
 
 <template>
   <Table v-if="project">
     <TableRow>
-      <TableHead> Name </TableHead>
-      <TableCell> {{ project.name }} </TableCell>
+      <TableHead class="w-10"> Name </TableHead>
+      <TableCell>
+        <AppInPlaceEditText v-model="project.name" @commit="updateProject" />
+      </TableCell>
     </TableRow>
     <TableRow>
       <TableHead> Description </TableHead>
       <TableCell>
-        {{ project.description }}
+        <AppInPlaceEditText v-model="project.description" @commit="updateProject" />
       </TableCell>
     </TableRow>
     <TableRow>
       <TableHead> Status </TableHead>
-      <TableCell>In progress</TableCell>
+      <AppInPlaceEditStatus v-model="project.status" @commit="updateProject" />
     </TableRow>
     <TableRow>
       <TableHead> Collaborators </TableHead>

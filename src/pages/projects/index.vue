@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { projectsQuery, type Projects } from '@/utils/supaQueries'
 import { columns } from '@/utils/tableColumns/projectColumns'
-const projects = ref<Projects | null>(null)
 
 usePageStore().pageData.title = 'Projects'
 
-const fetchProjects = async () => {
-  const { data, error } = await projectsQuery
-  if (error) {
-    console.error('Error fetching projects', error)
-    return
-  }
-  projects.value = data
-}
+const projectLoaderStore = useProjectsStore()
+
+const { projects } = storeToRefs(projectLoaderStore)
+const { fetchProjects } = projectLoaderStore
+const { getGroupedCollabs, groupedCollabs } = useCollabs()
+
 await fetchProjects()
+
+getGroupedCollabs(projects.value ?? [])
+
+const columnsWithCollabs = columns(groupedCollabs)
 </script>
 
 <template>
-  <DataTable v-if="projects" :columns="columns" :data="projects" />
+  <DataTable v-if="projects" :columns="columnsWithCollabs" :data="projects" />
 </template>
