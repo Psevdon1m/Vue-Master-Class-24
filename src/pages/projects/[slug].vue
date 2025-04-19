@@ -56,7 +56,7 @@ await getProject(route.params.slug as string)
     <div class="flex-1">
       <h2>Tasks</h2>
       <div class="table-container">
-        <Table>
+        <Table class="bg-background border-stone-800 border-2">
           <TableHeader>
             <TableRow>
               <TableHead> Name </TableHead>
@@ -76,7 +76,7 @@ await getProject(route.params.slug as string)
     </div>
     <div class="flex-1">
       <h2>Documents</h2>
-      <div class="table-container">
+      <div class="table-container bg-background border-stone-800 border-2">
         <p class="text-muted-foreground text-sm font-semibold px-4 py-3">
           This project doesn't have documents yet...
         </p>
@@ -110,6 +110,6 @@ h2 {
 }
 
 .table-container {
-  @apply overflow-hidden overflow-y-auto rounded-md bg-slate-900 h-80;
+  @apply overflow-hidden overflow-y-auto rounded-md bg-stone-900 h-80;
 }
 </style>
