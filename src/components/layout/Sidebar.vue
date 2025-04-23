@@ -1,8 +1,19 @@
 <script setup lang="ts">
+import { useWindowSize } from '@vueuse/core'
 const router = useRouter()
 const emit = defineEmits<{
   (e: 'open-task-sheet'): void
 }>()
+const { toggleMenu, menuOpen } = useMenu()
+const { width } = useWindowSize()
+
+watchEffect(() => {
+  if (width.value > 1024) {
+    menuOpen.value = true
+  } else {
+    menuOpen.value = false
+  }
+})
 const links = [
   {
     to: '/',
@@ -51,10 +62,11 @@ const handleLogout = async (title: string) => {
 
 <template>
   <aside
-    class="flex flex-col h-screen gap-2 border-r fixed bg-muted/40 lg:w-52 w-16 transition-[width]"
+    class="flex flex-col h-screen gap-2 border-r fixed bg-muted/40 transition-[width]"
+    :class="{ 'w-52': menuOpen, 'w-24': !menuOpen }"
   >
     <div class="flex h-16 items-center border-b px-2 lg:px-4 shrink-0 gap-1 justify-between">
-      <Button variant="outline" size="icon" class="w-8 h-8">
+      <Button @click="toggleMenu" variant="outline" size="icon" class="w-8 h-8">
         <iconify-icon icon="lucide:menu"></iconify-icon>
       </Button>
 

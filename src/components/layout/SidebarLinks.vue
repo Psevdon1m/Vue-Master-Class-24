@@ -16,6 +16,8 @@ const emit = defineEmits<{
 const logout = (link: LinkProp) => {
   emit('logout', link.title)
 }
+
+const { menuOpen } = useMenu()
 </script>
 
 <template>
@@ -24,19 +26,25 @@ const logout = (link: LinkProp) => {
       v-if="link.to"
       :to="link.to"
       :key="link.title"
-      class="flex items-center gap-3 px-4 py-2 mx-2 transition-colors rounded-lg hover:text-primary justify-center lg:justify-normal text-muted-foreground"
+      class="flex items-center gap-3 px-4 py-2 mx-2 transition-colors rounded-lg hover:text-primary text-muted-foreground"
       active-class="bg-primary/10 text-primary"
+      :class="{ 'justify-center': !menuOpen, 'justify-normal': menuOpen }"
     >
       <iconify-icon :icon="link.icon"></iconify-icon>
-      <span class="hidden lg:block text-nowrap">{{ link.title }}</span>
+      <span class="text-nowrap" :class="{ block: menuOpen, hidden: !menuOpen }">
+        {{ link.title }}
+      </span>
     </RouterLink>
     <a
       v-else
-      class="flex items-center gap-3 px-4 py-2 mx-2 transition-colors rounded-lg hover:text-primary justify-center lg:justify-normal text-muted-foreground cursor-pointer3"
+      class="flex items-center gap-3 px-4 py-2 mx-2 transition-colors rounded-lg hover:text-primarytext-muted-foreground cursor-pointer3"
       @click="logout(link)"
+      :class="{ 'justify-center': !menuOpen, 'justify-normal': menuOpen }"
     >
       <iconify-icon :icon="link.icon"></iconify-icon>
-      <span class="hidden lg:block text-nowrap">{{ link.title }}</span>
+      <span class="text-nowrap" :class="{ block: menuOpen, hidden: !menuOpen }">
+        {{ link.title }}
+      </span>
     </a>
   </template>
 </template>
