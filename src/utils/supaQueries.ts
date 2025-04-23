@@ -1,6 +1,6 @@
 import supabase from '@/lib/supabaseClient'
 import type { QueryData } from '@supabase/supabase-js'
-
+import type { CreateNewTask } from '@/types/CreateNewForm'
 export const tasksWithProjectsQuery = supabase.from('tasks').select('*, projects(id,name,slug)')
 export type TasksWithProjects = QueryData<typeof tasksWithProjectsQuery>
 
@@ -22,7 +22,7 @@ export const projectQuery = (slug: string) =>
 export type Project = QueryData<ReturnType<typeof projectQuery>>
 
 export const taskQuery = (id: string) =>
-  supabase.from('tasks').select(`*, projects(id,name,slug)`).eq('id', id).single()
+  supabase.from('tasks').select(`*, projects(id,name,slug)`).eq('id', Number(id)).single()
 export type Task = QueryData<ReturnType<typeof taskQuery>>
 
 export const profileQuery = ({ col, val }: { col: string; val: string }) =>
@@ -36,9 +36,17 @@ export type ProfilesByIds = QueryData<ReturnType<typeof profilesByIdsQuery>>
 export const updateProjectQuery = (
   updatedProject: Partial<Omit<Project, 'id'>>,
   id: string | number,
-) => supabase.from('projects').update(updatedProject).eq('id', id)
+) => supabase.from('projects').update(updatedProject).eq('id', Number(id))
 export type UpdateProject = QueryData<ReturnType<typeof updateProjectQuery>>
 
 export const updateTaskQuery = (updatedTask: Partial<Omit<Task, 'id'>>, id: string | number) =>
-  supabase.from('tasks').update(updatedTask).eq('id', id)
+  supabase.from('tasks').update(updatedTask).eq('id', Number(id))
 export type UpdateTask = QueryData<ReturnType<typeof updateTaskQuery>>
+
+export const profilesQuery = supabase.from('profiles').select('id,full_name')
+
+export const createTaskQuery = (task: CreateNewTask) =>
+  supabase.from('tasks').insert({ ...task, project_id: Number(task.project_id) })
+
+export const deleteTaskQuery = (id: string | number) =>
+  supabase.from('tasks').delete().eq('id', Number(id))

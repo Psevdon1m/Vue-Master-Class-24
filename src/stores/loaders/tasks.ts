@@ -4,6 +4,7 @@ import {
   type TasksWithProjects,
   type Task,
   updateTaskQuery,
+  deleteTaskQuery,
 } from '@/utils/supaQueries'
 
 import { useMemoize } from '@vueuse/core'
@@ -73,5 +74,14 @@ export const useTasksStore = defineStore('tasks-store', () => {
       return
     }
   }
-  return { tasks, fetchTasks, getTask, task, updateTask }
+
+  const deleteTask = async () => {
+    if (!task.value) return
+    const { error, status } = await deleteTaskQuery(task.value.id)
+    if (error) {
+      useErrorStore().showErrorPage({ error, code: status })
+      return
+    }
+  }
+  return { tasks, fetchTasks, getTask, task, updateTask, deleteTask }
 })
