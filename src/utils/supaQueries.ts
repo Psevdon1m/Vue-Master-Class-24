@@ -38,3 +38,7 @@ export const updateProjectQuery = (
   id: string | number,
 ) => supabase.from('projects').update(updatedProject).eq('id', id)
 export type UpdateProject = QueryData<ReturnType<typeof updateProjectQuery>>
+
+export const updateTaskQuery = (updatedTask: Partial<Omit<Task, 'id'>>, id: string | number) =>
+  supabase.from('tasks').update(updatedTask).eq('id', id)
+export type UpdateTask = QueryData<ReturnType<typeof updateTaskQuery>>
