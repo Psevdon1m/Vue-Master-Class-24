@@ -1,8 +1,8 @@
-import './assets/styles/index.css'
+import './index.css'
 import 'iconify-icon'
 
 import { plugin } from '@formkit/vue'
-import config from '../formkit.config.ts'
+import config from '../formkit.config'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'

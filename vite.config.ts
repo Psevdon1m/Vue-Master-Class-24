@@ -1,15 +1,15 @@
+import path from 'node:path'
+import tailwindcss from '@tailwindcss/vite'
+
 import { fileURLToPath, URL } from 'node:url'
 import VueRouter from 'unplugin-vue-router/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
 
 import Components from 'unplugin-vue-components/vite'
-import type { AcceptedPlugin } from 'postcss'
-
-import tailwindcss from '@tailwindcss/postcss'
-import autoprefixer from 'autoprefixer'
 
 import { defineConfig } from 'vite'
+import autoprefixer from 'autoprefixer'
 import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
@@ -18,14 +18,10 @@ export default defineConfig({
     VueRouter(),
     Components({
       /* options */
+      dirs: ['./src/components/**'],
     }),
     AutoImport({
-      include: [
-        /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
-        /\.vue$/,
-        /\.vue\?vue/, // .vue
-        /\.md$/, // .md
-      ],
+      include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/, /\.md$/],
       imports: [
         'vue',
         VueRouterAutoImports,
@@ -33,9 +29,9 @@ export default defineConfig({
           pinia: ['defineStore', 'storeToRefs', 'acceptHMRUpdate'],
         },
       ],
-      dts: true,
+      dts: './src/auto-imports.d.ts',
       viteOptimizeDeps: true,
-      dirs: ['src/stores/**', 'src/composables/**'],
+      dirs: ['./src/stores/**', './src/composables/**'],
     }),
     vue({
       template: {
@@ -44,12 +40,10 @@ export default defineConfig({
         },
       },
     }),
+    tailwindcss(),
+    autoprefixer(),
   ],
-  css: {
-    postcss: {
-      plugins: [tailwindcss(), autoprefixer()] as AcceptedPlugin[],
-    },
-  },
+
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
