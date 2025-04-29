@@ -94,24 +94,10 @@ const collabs = project.value?.collaborators
       </div>
       <div class="flex-1">
         <h2>Documents</h2>
-        <div class="table-container bg-background border-stone-800 border-2">
+        <div class="table-container border-stone-800 border-2 bg-white dark:bg-black">
           <p class="text-muted-foreground text-sm font-semibold px-4 py-3">
             This project doesn't have documents yet...
           </p>
-          <!-- <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead> Name </TableHead>
-              <TableHead> Visibility </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell> Lorem ipsum dolor sit amet. </TableCell>
-              <TableCell> Private </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table> -->
         </div>
       </div>
     </section>
@@ -129,6 +115,6 @@ h2 {
 }
 
 .table-container {
-  @apply overflow-hidden overflow-y-auto rounded-md bg-stone-900 h-80;
+  @apply overflow-hidden overflow-y-auto rounded-md h-80;
 }
 </style>
