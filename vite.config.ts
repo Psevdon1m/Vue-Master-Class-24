@@ -28,6 +28,9 @@ export default defineConfig({
         {
           pinia: ['defineStore', 'storeToRefs', 'acceptHMRUpdate'],
         },
+        {
+          'vue-meta': ['useMeta'],
+        },
       ],
       dts: './src/auto-imports.d.ts',
       viteOptimizeDeps: true,
