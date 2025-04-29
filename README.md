@@ -2,6 +2,23 @@
 
 This project is a part of Vue School's Vue Master Class 2024 course. Modern Vue.js application showcasing advanced features and best practices.
 
+## Topics covered in course
+- Latest Vue 3 features
+- TypeScript
+- TailwindCSS
+- Pinia
+- Auto-imports in Vue3
+- Filebase routing
+- Advanced Vite Configuration
+- Tanstack Tables
+- VueUse
+- Suspence
+- Composition API
+- FormKit
+- Supabase Queries
+- Shadcn UI library
+- Reka UI library
+
 ## 🚀 Key Features
 
 - **Authentication System**
