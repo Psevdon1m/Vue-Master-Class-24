@@ -37,7 +37,7 @@ const { menuOpen } = useMenu()
     </RouterLink>
     <a
       v-else
-      class="flex items-center gap-3 px-4 py-2 mx-2 transition-colors rounded-lg hover:text-primarytext-muted-foreground cursor-pointer3"
+      class="flex items-center gap-3 px-4 py-2 mx-2 transition-colors rounded-lg hover:text-primary text-muted-foreground cursor-pointer"
       @click="logout(link)"
       :class="{ 'justify-center': !menuOpen, 'justify-normal': menuOpen }"
     >
