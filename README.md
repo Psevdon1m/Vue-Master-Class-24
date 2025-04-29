@@ -1,18 +1,142 @@
-# .
+# Vue Master Class 24
 
-This template should help get you started developing with Vue 3 in Vite.
+This project is a part of Vue School's Vue Master Class 2024 course. Modern Vue.js application showcasing advanced features and best practices.
 
-## Recommended IDE Setup
+## 🚀 Key Features
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- **Authentication System**
 
-## Type Support for `.vue` Imports in TS
+  - Secure user authentication with Supabase
+  - Protected routes
+  - Persistent session management
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+- **Task Management**
 
-## Customize configuration
+  - Create, read, update, and delete tasks
+  - Task status tracking (in_progress, completed)
+  - Due date management
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+- **Project Management**
+
+  - Project creation and organization
+  - Task grouping by projects
+  - Project status tracking
+
+- **User Management**
+
+  - User profiles with avatars
+  - User activity tracking
+
+- **Modern UI/UX**
+  - Responsive design
+  - Dark mode support
+  - Smooth transitions and animations
+  - In-place editing capabilities
+
+## 🛠️ Tech Stack
+
+- **Frontend Framework**
+
+  - Vue 3 with Composition API
+  - TypeScript for type safety
+  - Vite for fast development and building
+
+- **State Management**
+
+  - Pinia for centralized state management
+  - Reactive stores with TypeScript support
+
+- **Styling**
+
+  - Tailwind CSS for utility-first styling
+  - Utilizing shadcn components
+  - Custom theme system with dark mode
+
+- **Backend & Database**
+
+  - Supabase for backend services
+  - PostgreSQL database
+
+- **Routing**
+  - Vue Router with type-safe routes
+  - Dynamic route handling
+  - Route guards for authentication
+
+## 🔥 Advanced Vue Approaches
+
+### Async Components & Suspense
+
+The application leverages Vue's advanced features for better performance and user experience:
+
+```vue
+<!-- Async Component Loading -->
+const AuthLayout = defineAsyncComponent(() => import('@/components/Layout/main/AuthLayout.vue'))
+
+<!-- Suspense for Async Components -->
+<Suspense v-if="Component" :timeout="0">
+  <Component :is="Component" :key="route.name" />
+  <template #fallback>
+    <!-- Loading spinner -->
+  </template>
+</Suspense>
+```
+
+### Composition API Patterns
+
+- **Composables**
+
+  - Custom composables for reusable logic
+  - Type-safe composables with TypeScript
+  - Separation of concerns
+
+- **Reactive State**
+  - `ref` for state management
+  - Computed properties for derived state
+  - Watchers for side effects
+
+### Type Safety
+
+- TypeScript integration throughout the application
+- Type definitions for all components and stores
+- Type-safe API calls and data handling
+
+### Performance Optimizations
+
+- Lazy loading of components
+- Code splitting for better initial load time
+- Efficient state management
+- Optimized rendering with keyed transitions
+
+## 🚀 Getting Started
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   ```
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+## 📚 Documentation
+
+- [Vue 3 Documentation](https://v3.vuejs.org/)
+- [Supabase Documentation](https://supabase.io/docs)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [Vite Documentation](https://vitejs.dev/guide/)
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Project Setup
 
