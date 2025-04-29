@@ -32,6 +32,29 @@ export const register = async (formData: RegisterForm) => {
 
   return false
 }
+export const signInWithGoogle = async () => {
+  try {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
+        redirectTo: `${window.location.origin}`,
+      },
+    })
+
+    if (error) throw error
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Error:', error.message)
+    } else {
+      console.error('Error:', String(error))
+    }
+    throw error
+  }
+}
 
 export const login = async (formData: LoginForm) => {
   const { error } = await supabase.auth.signInWithPassword(formData)

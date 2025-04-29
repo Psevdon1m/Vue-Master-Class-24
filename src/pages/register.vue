@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { register } from '@/utils/supaAuth'
+import { register, signInWithGoogle } from '@/utils/supaAuth'
 
 const formData = ref({
   username: '',
@@ -31,7 +31,9 @@ const signup = async () => {
       </CardHeader>
       <CardContent>
         <div class="flex flex-col gap-4 mb-4 justify-center items-center">
-          <Button variant="outline" class="w-full"> Register with Google </Button>
+          <Button @click="signInWithGoogle" variant="outline" class="w-full">
+            Register with Google
+          </Button>
           <Separator label="Or" />
         </div>
         <form class="grid gap-4" @submit.prevent="signup">

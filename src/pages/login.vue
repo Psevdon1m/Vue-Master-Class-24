@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { login } from '@/utils/supaAuth'
+import { login, signInWithGoogle } from '@/utils/supaAuth'
 import { debouncedWatch } from '@vueuse/core'
 
 const router = useRouter()
@@ -37,7 +37,9 @@ const signin = async () => {
       </CardHeader>
       <CardContent>
         <div class="flex flex-col gap-4 mb-4 justify-center items-center">
-          <Button variant="outline" class="w-full"> Register with Google </Button>
+          <Button @click="signInWithGoogle" variant="outline" class="w-full">
+            Login with Google
+          </Button>
           <Separator label="Or" />
         </div>
 
@@ -63,7 +65,7 @@ const signin = async () => {
           <div class="grid gap-2">
             <div class="flex items-center">
               <Label id="password">Password</Label>
-              <a href="#" class="inline-block ml-auto text-xs underline"> Forgot your password? </a>
+              <!-- <a href="#" class="inline-block ml-auto text-xs underline"> Forgot your password? </a> -->
             </div>
             <Input
               id="password"
